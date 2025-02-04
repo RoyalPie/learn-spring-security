@@ -24,4 +24,5 @@ public class UserController {
     public ResponseEntity<String> hello(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok("WELCOME " + userDetails.getUsername());
     }
+    //testt
 }
