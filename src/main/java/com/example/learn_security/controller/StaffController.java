@@ -4,8 +4,10 @@ import com.example.learn_security.entity.Staff;
 import com.example.learn_security.repository.StaffRepository;
 
 import com.example.learn_security.service.StaffService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +30,10 @@ public class StaffController {
     }
     @PostMapping("/new")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addStaff(@RequestBody Staff staff) {
+    public String addStaff(@RequestBody @Valid Staff staff, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "Validation failed";
+        }
         return staffService.addStaff(staff);
     }
     @GetMapping("/{id}")
@@ -44,7 +49,7 @@ public class StaffController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public String update(@PathVariable Long id,@RequestBody Staff staff) {
+    public String update(@PathVariable Long id,@RequestBody @Valid Staff staff) {
         return staffService.updateUser(id,staff);
     }
 }
