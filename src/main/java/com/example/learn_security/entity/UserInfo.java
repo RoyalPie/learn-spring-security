@@ -11,10 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity // dùng để khai báo với Spring Boot rằng đây là 1 entity biểu diễn table trong db
-@Data // annotation này sẽ tự động khai báo getter và setter cho class
-@AllArgsConstructor // dùng để khai báo constructor với tất cả các properties
-@NoArgsConstructor // dùng để khai báo constructor rỗng không có param
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserInfo implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
     }
 
     @Override

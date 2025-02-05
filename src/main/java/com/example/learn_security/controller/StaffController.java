@@ -19,8 +19,9 @@ public class StaffController {
     public StaffController(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
     }
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Staff>> getAllStaff() {
         List<Staff> staffList = staffRepository.findAll();
         return ResponseEntity.ok(staffList);
