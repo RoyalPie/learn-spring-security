@@ -1,6 +1,5 @@
 package com.example.learn_security.jwt;
 
-import com.example.learn_security.service.UserInfoDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
