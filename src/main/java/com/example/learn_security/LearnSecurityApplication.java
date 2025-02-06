@@ -1,6 +1,5 @@
 package com.example.learn_security;
 
-import com.example.learn_security.repository.UserInfoRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
