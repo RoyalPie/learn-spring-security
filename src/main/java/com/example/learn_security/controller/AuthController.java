@@ -1,7 +1,10 @@
 package com.example.learn_security.controller;
 
 import com.example.learn_security.dto.LoginDto;
+import com.example.learn_security.entity.RefreshToken;
 import com.example.learn_security.jwt.JwtUtil;
+import com.example.learn_security.payload.response.JwtResponse;
+import com.example.learn_security.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -25,10 +28,13 @@ public class AuthController {
     @Autowired
     private JwtUtil tokenProvider;
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
     SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -39,7 +45,9 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(loginRequest.getUsername());
-        return new ResponseEntity<>("Your token is: Bearer "+ jwt,HttpStatus.OK);
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken();
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), loginRequest.getUsername()));
     }
     @PostMapping("/logout")
     public ResponseEntity<String> logout(Authentication authentication,HttpServletRequest request, HttpServletResponse response) {

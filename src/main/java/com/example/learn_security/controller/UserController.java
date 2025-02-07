@@ -3,9 +3,9 @@ package com.example.learn_security.controller;
 import com.example.learn_security.entity.UserInfo;
 import com.example.learn_security.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +21,10 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public ResponseEntity<String> hello(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok("WELCOME " + userDetails.getUsername());
+    public ResponseEntity<String> hello(@AuthenticationPrincipal String username) {
+
+        return userService.findbyUsername(username)
+                .map(user -> ResponseEntity.ok("WELCOME " + user.getUsername()))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
     }
 }
